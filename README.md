@@ -85,6 +85,11 @@ Evauation on OPUS-100:
 
 `eval_capacity_factor` has a great influence on the translation performance. For evaluation on OPUS-100, `eval_capacity_factor` should be set to at least 0.5. As for the evaluation on WMT17-en-fr, setting `eval_capacity_factor=-1` is enough.
 
+# Hyperparamter tuning
+According to our experiments, ratio1 ($\alpha$) should be set to a low value, like 0.2, while ratio2 ($\beta$) should be set to a high value, like 0.5.
+
+If the model is SCoMoE-Feat, ratio1 and ratio2 should be the power of 2, for example 0.5, 0.25, 0.125, otherwise the communication will be slow.
+
 ## Optimizations based on moe benchmark of fairseq
 ### dist-mmap
 fairseq use `mmap` to load datasets, which loads the data stored in `.bin` file according to the data index stored in `.index` file. The data index records the position of each sentence in `.bin` file. While training, fairseq loads all `.index` file in memmory, which requires huge memory if dataset is large. To avoids memory overflow, we implement `dist-mmap`, which shard the data index on multiple process. That means each process only loads a part of data index. However, it only works for data parallel and moe parallel.
