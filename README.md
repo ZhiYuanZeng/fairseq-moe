@@ -85,7 +85,7 @@ Evauation on OPUS-100:
 
 `eval_capacity_factor` has a great influence on the translation performance. For evaluation on OPUS-100, `eval_capacity_factor` should be set to at least 0.5. As for the evaluation on WMT17-en-fr, setting `eval_capacity_factor=-1` is enough.
 
-# Hyperparamter tuning
+## Hyperparamter tuning
 According to our experiments, ratio1 ($\alpha$) should be set to a low value, like 0.2, while ratio2 ($\beta$) should be set to a high value, like 0.5.
 
 If the model is SCoMoE-Feat, ratio1 and ratio2 should be the power of 2, for example 0.5, 0.25, 0.125, otherwise the communication will be slow.

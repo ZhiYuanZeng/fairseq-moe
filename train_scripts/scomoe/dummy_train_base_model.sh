@@ -40,7 +40,7 @@ python train.py \
     --dropout 0.3 --weight-decay 0.0001 \
     --criterion cross_entropy \
     --max-tokens 4096 \
-    --ddp-backend legacy_ddp \
+    --ddp-backend fully_sharded \
     --fp16 \
     --encoder-normalize-before \
     --decoder-normalize-before \
@@ -54,5 +54,5 @@ python train.py \
     --record-a2a-perf-stats \
     --dataset-size 500000 \
     $moe_args \
-    $scomoe_feat_args \
     --no-save
+#     $scomoe_feat_args \
