@@ -1,5 +1,5 @@
 # fairseq-moe
-## overview
+## Overview
 An MoE implementation based on the moe branch of fairseq.
 
 Supported models
@@ -23,7 +23,7 @@ Optimizations based on moe branch of fairseq:
 - slurm (for running multi-node training/inference)
 - fairscale
 
-## installment
+## Installment
 `pip install -e ./`
 
 `python setup.py build_ext --inplace`
@@ -35,7 +35,7 @@ Process:
 3. Binarizing the data with `fairseq-preprocess`
 
 datasets:
-- OPUS-100: download data from opus website. (the scripts for preprocessing of the OPUS-100 data is in `./preprocess_scripts/multilingual_preprocess.sh` )
+- OPUS-100: download data from opus website. The preprocessing pipeline follows "https://github.com/cordercorder/nmt-multi" (you can find the scripts for preprocessing at `https://github.com/cordercorder/nmt-multi/blob/main/scripts/opus-100/data_process/multilingual_preprocess.sh` )
 
 - WMT17-En-Fr: download and clean data with `examples/translation/prepare-wmt14en2fr.sh`
 
@@ -81,7 +81,7 @@ Evauation on OPUS-100:
 - `bash eval_large_on_opus.sh --save_dir ${ckpt_path} -subset {valid|test} -capacity_factor ${eval_capacity_factor} --r1 ${ratio1} --r2 ${ratio2}$`
 
 
-`ratio1` and `ratio2` are only necessary for the evaluation of Gshard. For SCoMoE-seq, it is better to set `ratio1=0` and `ratio2=0`. While for SCoMoE-Feat, they should be the same values as those at training.
+`ratio1` and `ratio2` are only necessary for the evaluation of SCoMoE. For SCoMoE-seq, it is better to set `ratio1=0` and `ratio2=0`. While for SCoMoE-Feat, they should be the same values as those at training.
 
 `eval_capacity_factor` has a great influence on the translation performance. For evaluation on OPUS-100, `eval_capacity_factor` should be set to at least 0.5. As for the evaluation on WMT17-en-fr, setting `eval_capacity_factor=-1` is enough.
 
@@ -96,3 +96,6 @@ fairseq use `mmap` to load datasets, which loads the data stored in `.bin` file 
 
 ### data-parallel inference
 MoE parallel is the combination of data parallel and model parallel. Both data and model parameters are sharded on multiple processed. However, the fairseq implementation forces all processes to run the same batch at inference, because the decoding of NMT is not synchronized. Some processes generate <eos> and stop the decoding, while other processes are still decoding, which can cause communication problem. Forcing all processes to run the same data is a solution, but not a good solution, because that makes the inference very slow. We solve this problem by explicitly synchronize processes, and force all processes to stop decoding at the same time.
+
+## Acknowledgement
+Thanks for [cordercorder](https://github.com/cordercorder), who helped me preprocess the opus-100 dataset and fix many bugs.
